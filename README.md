@@ -43,25 +43,29 @@ switch>
 
 ## Install
 
-Needs the Rex app (for the `rex` command), plus `fzf`, `jq`, and `curl`:
-
 ```sh
-brew install fzf jq
-git clone https://github.com/destinio/rex-switcher
-cd rex-switcher
-./install.sh            # or ./install.sh --link to update with git pull
+curl -fsSL https://raw.githubusercontent.com/destinio/rex-switcher/main/install.sh | bash
 ```
 
-This copies `switcher/` into your Rex config directory, adds one line to `init.lua`, and reloads Rex.
-Then press **`ctrl+a f`**.
+That clones this repo to `~/.local/share/rex-switcher`, links it into your Rex config, adds one line to `init.lua`, and reloads Rex. ([Read the script](install.sh) first if you like.) Then press **`ctrl+a f`**.
+
+Run the same command again to update.
+
+It needs the Rex app (for the `rex` command) plus `fzf`, `jq`, `curl`, and `git`. The installer checks and tells you what's missing (`brew install fzf jq`).
 
 **Turn on Remote Control** (Rex Settings → Server) to jump to panes in other sessions.
 Without it, switching within the current session still works.
 
+Or by hand:
+
+```sh
+git clone https://github.com/destinio/rex-switcher && cd rex-switcher && ./install.sh
+```
+
 ### Different key
 
 ```sh
-KEY='ctrl+b>w' ./install.sh
+curl -fsSL https://raw.githubusercontent.com/destinio/rex-switcher/main/install.sh | KEY='ctrl+b>w' bash
 ```
 
 Or edit the line it added to `init.lua`:
@@ -79,11 +83,16 @@ dofile(os.getenv("HOME") .. "/.config/rex/switcher/bind.lua")({
 |---|---|
 | `switcher/bind.lua` | Binds the key; opens a floating pane running `switcher.sh` |
 | `switcher/list.lua` | Gathers sessions, panes, titles, and statuses in one `rex do` call |
+| `install.sh` | Installs, updates (`git pull`), or uninstalls (`--uninstall`) |
 | `switcher/switcher.sh` | Runs fzf, handles close/rename, and switches the app with `session.select` |
 
 ## Uninstall
 
-Remove the `rex-switcher` lines from `init.lua`, delete the `switcher` folder next to it, and run `rex config reload`.
+```sh
+curl -fsSL https://raw.githubusercontent.com/destinio/rex-switcher/main/install.sh | bash -s -- --uninstall
+```
+
+This removes the line from `init.lua` and the link, then reloads Rex. Delete `~/.local/share/rex-switcher` too if you like.
 
 ## License
 
